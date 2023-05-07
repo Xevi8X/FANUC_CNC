@@ -7,7 +7,7 @@ class Visualization:
 
     def __init__(self) -> None:
         plt.ion()
-        #matplotlib.use('TkAgg')
+        matplotlib.use('QtAgg')
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(projection='3d')
         self.ax.axes.set_xlim3d(left=0, right=100) 
