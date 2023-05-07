@@ -31,6 +31,7 @@ Item {
             CustomTextField {
                 id: textField
                 placeholderText: "Type robot IP adress"
+                text: "192.168.234.2:18735"
                 Layout.fillWidth: true
                 Keys.onReturnPressed: {
                     backend.addressIP(textField.text)

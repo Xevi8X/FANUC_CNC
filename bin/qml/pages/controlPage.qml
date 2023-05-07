@@ -23,6 +23,13 @@ Item {
         function onSetPort(port){
             currPort = port
         }
+
+        function onSetSpeed(value){
+            speed = value
+        }
+        function onSetZ(value){
+            z_offset = value
+        }
     }
 
     Rectangle {
