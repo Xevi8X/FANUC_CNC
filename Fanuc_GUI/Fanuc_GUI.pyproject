@@ -1,0 +1,3 @@
+{
+    "files": ["qml/pages/homePage.qml","qml/controls/ControlSpinBox.qml","qml/controls/TopBarButton.qml","qml/controls/LeftMenuBtn.qml","main.qml","qml/controls/CustomButton.qml","qml/pages/controlPage.qml","qml/controls/CustomTextField.qml","main.py","resources/resources.qrc","qml/controls/ControlCustomButton.qml","qml/pages/settingsPage.qml","qml/controls/ToggleButton.qml","qml/controls/CustomSlider.qml"]
+}
