@@ -69,7 +69,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.horizontalCenter: parent.horizontalCenter
-                btnIconSource:  "../../images/svg_images/play_icon.svg"
+                btnIconSource:  "../images/svg_images/play_icon.svg"
             }
             ControlCustomButton {
                 id: pauseBtn
@@ -77,7 +77,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.leftMargin: 10
-                btnIconSource:  "../../images/svg_images/pause_icon.svg"
+                btnIconSource:  "../images/svg_images/pause_icon.svg"
             }
         }
 

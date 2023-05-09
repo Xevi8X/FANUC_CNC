@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 import Qt.labs.platform 1.1
@@ -18,9 +17,8 @@ Window {
 
 
     //Remove title bar
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WA_TranslucentBackground
-
-
+    flags: Qt.Window | Qt.FramelessWindowHint 
+    
     //Properties
     property int windowStatus: 0
     property int windowMargin: 10
@@ -45,13 +43,13 @@ Window {
                 windowStatus = 1
                 windowMargin = 0
                 internal.resizeVisibility(false)
-                btnMaximizeRestore.btnIconSource = "../../images/svg_images/restore_icon.svg"
+                btnMaximizeRestore.btnIconSource = "../images/svg_images/restore_icon.svg"
             } else {
                 mainWindow.showNormal()
                 windowStatus = 0
                 windowMargin = 10
                 internal.resizeVisibility(true)
-                btnMaximizeRestore.btnIconSource = "../../images/svg_images/maximize_icon.svg"
+                btnMaximizeRestore.btnIconSource = "../images/svg_images/maximize_icon.svg"
             }
         }
 
@@ -61,7 +59,7 @@ Window {
                 windowStatus = 0
                 windowMargin = 10
                 internal.resizeVisibility(true)
-                btnMaximizeRestore.btnIconSource = "../../images/svg_images/maximize_icon.svg"
+                btnMaximizeRestore.btnIconSource = "../images/svg_images/maximize_icon.svg"
             }
         }
 
@@ -69,7 +67,7 @@ Window {
             windowStatus = 0
             windowMarin = 10
             internal.resizeVisibility(true)
-            btnMaximizeRestore.btnIconSource = "../../images/svg_images/maximize_icon.svg"
+            btnMaximizeRestore.btnIconSource = "../images/svg_images/maximize_icon.svg"
         }
     }
 
@@ -178,7 +176,7 @@ Window {
                         anchors.left: parent.left
                         anchors.top: parent.top
                         anchors.bottom: parent.bottom
-                        source: "../images/mel_logo.png"
+                        source: "images/mel_logo.png"
                         anchors.bottomMargin: 0
                         anchors.leftMargin: 5
                         anchors.topMargin: 0
@@ -218,14 +216,14 @@ Window {
 
                     TopBarButton {
                         id: btnMaximizeRestore
-                        btnIconSource: "../../images/svg_images/maximize_icon.svg"
+                        btnIconSource: "../images/svg_images/maximize_icon.svg"
                         onClicked: internal.maximizeRestore()
                     }
 
                     TopBarButton {
                         id: btnClose
                         btnColorClicked: "#ff007f"
-                        btnIconSource: "../../images/svg_images/close_icon.svg"
+                        btnIconSource: "../images/svg_images/close_icon.svg"
                         onClicked: mainWindow.close()
                     }
                 }
@@ -279,7 +277,8 @@ Window {
                             isActiveMenu: true
                             onClicked: {
                                 btnHome.isActiveMenu = true
-                                btnSettings.isActiveMenu = false
+                                btnVisualize.isActiveMenu = false
+                                //btnSettings.isActiveMenu = false
                                 btnRobot.isActiveMenu = false
                                 stackView.push("pages/controlPage.qml")
                             }
@@ -290,10 +289,11 @@ Window {
                             width: leftMenu.width
                             text: qsTr("Hardware")
                             isActiveMenu: false
-                            btnIconSource: "../../images/svg_images/robot_icon.svg"
+                            btnIconSource: "../images/svg_images/robot_icon.svg"
                             onClicked: {
                                 btnRobot.isActiveMenu = true
-                                btnSettings.isActiveMenu = false
+                                //btnSettings.isActiveMenu = false
+                                btnVisualize.isActiveMenu = false
                                 btnHome.isActiveMenu = false
                                 stackView.push("pages/robotPage.qml")
                             }
@@ -304,7 +304,7 @@ Window {
                             width: leftMenu.width
                             text: qsTr("Open")
                             isActiveMenu: false
-                            btnIconSource: "../../images/svg_images/open_icon.svg"
+                            btnIconSource: "../images/svg_images/open_icon.svg"
 
                             onPressed: {
                                     fileOpen.open()
@@ -322,44 +322,37 @@ Window {
                         }
 
                         LeftMenuBtn {
-                            id: btnSave
+                            id: btnVisualize
                             width: leftMenu.width
-                            text: qsTr("Save")
-                            btnIconSource: "../../images/svg_images/save_icon.svg"
+                            text: qsTr("Visualize")
+                            btnIconSource: "../images/svg_images/visualize_icon.svg"
 
-                            onPressed:{
-                                fileSave.open()
-                            }
-
-                            FileDialog{
-                                id: fileSave
-                                fileMode: FileDialog.SaveFile
-                                title: "Save NC file"
-                                nameFilters: ["NC file (*.NC)"]
-                                onAccepted: {
-                                    backend.getTextField(actualPage.getText)
-                                    backend.writeFile(fileSave.currentFile)
-                                }
+                            onClicked:{
+                                btnRobot.isActiveMenu = false
+                                //btnSettings.isActiveMenu = false
+                                btnVisualize.isActiveMenu = true
+                                btnHome.isActiveMenu = false
+                                stackView.push("pages/visualizePage.qml")
                             }
                         }
                     }
 
-                    LeftMenuBtn {
-                        id: btnSettings
-                        width: leftMenu.width
-                        text: qsTr("Settings")
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 25
-                        btnIconSource: "../../images/svg_images/settings_icon.svg"
-                        clip: true
-                        onClicked: {
-                            btnSettings.isActiveMenu = true
-                            btnHome.isActiveMenu = false
-                            btnRobot.isActiveMenu = false
-                            stackView.push("pages/settingsPage.qml")
-                        }
+                    // LeftMenuBtn {
+                    //     id: btnSettings
+                    //     width: leftMenu.width
+                    //     text: qsTr("Settings")
+                    //     anchors.bottom: parent.bottom
+                    //     anchors.bottomMargin: 25
+                    //     btnIconSource: "../images/svg_images/settings_icon.svg"
+                    //     clip: true
+                    //     onClicked: {
+                    //         btnSettings.isActiveMenu = true
+                    //         btnHome.isActiveMenu = false
+                    //         btnRobot.isActiveMenu = false
+                    //         stackView.push("pages/settingsPage.qml")
+                    //     }
 
-                    }
+                    // }
                 }
                 
                 Rectangle {
@@ -434,7 +427,7 @@ Window {
                             anchors.right: parent.right
                             anchors.top: parent.top
                             anchors.bottom: parent.bottom
-                            source: "../images/svg_images/resize_icon.svg"
+                            source: "images/svg_images/resize_icon.svg"
                             anchors.rightMargin: 0
                             anchors.bottomMargin: 0
                             anchors.leftMargin: 5

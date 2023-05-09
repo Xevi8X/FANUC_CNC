@@ -4,11 +4,11 @@ import os
 import datetime
 import time
 
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtWidgets import QLabel
+from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtWidgets import QLabel, QWidget
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
-from PySide6.QtCore import QObject, Slot, Signal, QTimer, QUrl, Property, QWidget
+from PySide6.QtCore import QObject, Slot, Signal, QTimer, QUrl, Property
 
 import logging
 from CommandProcessor import CommandProcessor
@@ -195,6 +195,7 @@ class mainWindow(QObject):
     
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
+    app.setWindowIcon(QIcon('bin/qml/images/svg_images/robot_icon_white.svg'))
     QQuickStyle.setStyle("Basic")
     engine = QQmlApplicationEngine()
 

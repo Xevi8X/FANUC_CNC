@@ -7,10 +7,10 @@ Button {
     flat: true
 
     //Custom properties
-    property url btnIconSource: "../../images/svg_images/menu_icon.svg"
+    property url btnIconSource: "../images/svg_images/menu_icon.svg"
     property color btnColorDefault: "#002b5b"
-    property color btnColorMouseOver: "#000000"
-    property color btnColorClicked: "#000000"
+    property color btnColorMouseOver: "#23272E"
+    property color btnColorClicked: "#00a1f1"
 
 
     QtObject{
