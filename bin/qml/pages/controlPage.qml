@@ -4,8 +4,6 @@ import "../controls"
 import QtQuick.Layouts 6.3
 
 Item {
-    id: item1
-    anchors.fill: parent
     property string currPort: "Port: Non connected"
 
     Connections{
@@ -27,8 +25,17 @@ Item {
         function onSetSpeed(value){
             speed = value
         }
+
         function onSetZ(value){
             z_offset = value
+        }
+
+        function onPrintTime(time){
+            logsTextArea.append(time)
+        }
+
+        function onLineNo(no){
+            labelActualLine.text = no
         }
     }
 
@@ -44,40 +51,43 @@ Item {
         anchors.topMargin: 50
 
         Row {
-            id: btnsRow
+            id: btnsRectangle
             width: 170
             height: 60
             anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.left: labelControlsBtns.left
             anchors.top: labelActualLine.bottom
-            anchors.leftMargin: 0
-            anchors.topMargin: 5
-            anchors.horizontalCenter: parent.horizontalCenter
+
+            anchors.leftMargin: 5
+            anchors.topMargin: 15
             spacing: 10
 
             ControlCustomButton {
                 id: upOne
-                anchors.left: parent.left
-                anchors.right: playBtn.left
-                anchors.top: parent.top
                 anchors.leftMargin: 5
                 anchors.topMargin: 5
                 anchors.rightMargin: 10
+                onClicked:{
+                    backend.oneStep()
+                }
             }
             ControlCustomButton {
                 id: playBtn
-                anchors.top: parent.top
                 anchors.topMargin: 5
-                anchors.horizontalCenter: parent.horizontalCenter
                 btnIconSource:  "../images/svg_images/play_icon.svg"
+                onClicked:{
+                    backend.start()
+                }
             }
             ControlCustomButton {
                 id: pauseBtn
-                anchors.left: playBtn.right
-                anchors.top: parent.top
                 anchors.topMargin: 5
                 anchors.leftMargin: 10
                 btnIconSource:  "../images/svg_images/pause_icon.svg"
+                onClicked:{
+                    backend.pause()
+                }
             }
         }
 
@@ -138,29 +148,38 @@ Item {
         }
 
         ControlSpinBox{
+            id: spinbox_z
             anchors.top: labelZControl.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: 10
+            onValueModified: {
+                    backend.setZ(spinbox_z.value)
+                }
 
         }
 
         CustomSlider{
+            id: speedSlider
             anchors.top: labelSpindleControl.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.topMargin: 5
             from: 0
             value: 25
             to: 100
+            onMoved: {
+                backend.setSpeed(speedSlider.value)
+            }
         }
     }
 
     TextArea {
-        id: textArea
+        id: logsTextArea
         anchors.left: rectangleProgControlBtns.right
         anchors.right: parent.right
         anchors.top: rectangleProgControlBtns.top
         anchors.bottom: rectangleHWControls.bottom
         wrapMode: Text.WordWrap
+        readOnly: true
         clip: true
         anchors.rightMargin: 20
         anchors.leftMargin: 20

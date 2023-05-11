@@ -1,12 +1,27 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls 2.2
+
 
 SpinBox {
+    property int decimals: 2
+    property real realValue: 0.0
+    property real realFrom: -5.0
+    property real realTo: 5.0
+    property real realStepSize: 0.1
+    property real factor: Math.pow(10, decimals)
     id: control
-    value: 0
-    from: -5
-    to: 5
+    stepSize: realStepSize*factor
+    value: realValue*factor
+    to: realTo*factor
+    from: realFrom*factor
     editable: false
+
+    textFromValue: function(value, locale) {
+        return parseFloat(value*1.0/factor).toFixed(decimals)
+    }
+    valueFromText: function(text, locale) { 
+        return Number.fromLocaleString(locale, text) 
+    }
 
     contentItem: TextInput {
         z: 2

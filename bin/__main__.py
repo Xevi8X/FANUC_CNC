@@ -2,7 +2,6 @@
 import sys
 import os
 import datetime
-import time
 
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtWidgets import QLabel, QWidget
@@ -15,21 +14,21 @@ from CommandProcessor import CommandProcessor
 from CommandExecutor import CommandExecutor
 from submodules.fanucpy_extended import Robot
 from time import sleep
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
-import threading
+from threading import Thread
 
 
 
 class mainWindow(QObject):
+
     def __init__(self):
         QObject.__init__(self)
-
         # QTimer - run timer
-        self.timer = QTimer()
-        self.timer.setInterval(100)
-        #self.timer.timeout.connect(self.addressPort)
-        self.timer.start(1000)
+        # self.timer = QTimer()
+        # self.timer.setInterval(100)
+        # self.timer.timeout.connect(self.addressPort)
+        # self.timer.start(1000)
 
         self.run : bool = False
 
@@ -39,10 +38,10 @@ class mainWindow(QObject):
 
     def exit(self):
         print("Exiting")
+        self.working = False
         self.pause()
         if self.robot:
             self.robot.disconnect()
-        
 
     # Signal set name
     setName = Signal(str)
@@ -51,10 +50,16 @@ class mainWindow(QObject):
     setIP = Signal(str)
 
     # Robot Port
-    setPort= Signal(str)
+    setPort = Signal(str)
 
-    # Signal set Data
+    # Spindle Speed
+    setZ = Signal(int)
+
+    # Signal timer
     printTime = Signal(str)
+
+    # Signal set line number
+    lineNo = Signal(str)
 
     # Signal visible
     isVisible = Signal(bool)
@@ -68,41 +73,28 @@ class mainWindow(QObject):
         path = QUrl(filePath).toLocalFile()
         self.processor = CommandProcessor(path)
         self.executor = CommandExecutor(self.robot,False)
-        print(path)
-        #self.readText.emit(str(text))
-        #self.start()
-        widget = QLabel()
-        widget.setText("TEST")
-        self.setVisualizationWidget()
-
-
+        # print(path)
+        self.start()
 
     # Read text
     @Slot(str)
     def getTextField(self,text):
         self.textField = text
 
-    # Write file
-    @Slot(str)
-    def writeFile(self, filePath):
-        file = open(QUrl(filePath).toLocalFile(),"w")
-        file.write(self.textField)
-        file.close()
-        print(self.textField)
-
-
     # Show/hide rectangle
     @Slot(bool)
-    def showHideRectangle(self,isChecked):
-        #print("Is rectangle visible ", isChecked)
+    def showHideRectangle(self, isChecked):
+        #print("Is rectangle visible", isChecked)
         self.isVisible.emit(isChecked)
 
     # Set timer function
     def setTime(self):
-        now = datetime.datetime.now()
-        formatDate = now.strftime("%H:%M:%S")
-        print(formatDate)
-        self.printTime.emit(formatDate)
+        while self.run:
+            now = datetime.datetime.now()
+            formatDate = now.strftime("%H:%M:%S")
+            # print(formatDate)
+            self.printTime.emit(formatDate)
+            sleep(2)
 
     # Function set name to label
     @Slot(str)
@@ -130,33 +122,43 @@ class mainWindow(QObject):
     def addressPort(self, port):
         self.setPort.emit("Port: " + str(port))
 
-    ##TODO link to GUI
-    def setSpeed(self,speed):
+    # Setting spindle speed
+    @Slot(int)
+    def setSpeed(self, speed):
+        print("Spindle speed: " + str(speed/100.0))
         if self.executor:
             self.executor.setSpeedFactor(speed/100.0)
 
-    ##TODO link to GUI
-    def setZ(self,z_offset):
+    # Setting Z offset
+    @Slot(int)
+    def setZ(self, z_offset):
+        print("Z offset: " + str(z_offset/100.0))
         if self.executor:
-            self.executor.setZOffset(z_offset/10.0)
+            self.executor.setZOffset(z_offset/100.0)
 
-    ##TODO link to GUI
+    # Pausing program
+    @Slot()
     def pause(self):
         self.run = False
+        print("Pause")
         if self.loop.is_alive():
             self.loop.join()
 
-    ##TODO link to GUI
+    @Slot()
     def start(self):
+        print("Start")
+              
         if self.run == False:
+            print("Running")
             self.run = True
-            self.loop = threading.Thread(target=self.loopJob)
+            self.loop = Thread(target=self.loopJob)
+            self.timer_thread = Thread(target=self.setTime).start()
             self.loop.start()
-        pass
 
-    ##TODO link to GUI
+    @Slot()
     def oneStep(self):
         if not self.run:
+            print("Executing One Line")
             self.executeOneLine()
 
     def executeOneLine(self) -> bool:
@@ -165,12 +167,13 @@ class mainWindow(QObject):
             if no >= 0:
                 for command in commands:
                     self.addLogLine(str(command))
-                    self.setAccualLineNo(no)
+                    self.setActualLineNo(no)
                     self.executor.execute(command)
                 return False
             else:
                 self.addLogLine("EOF")
-                self.setAccualLineNo(-1)
+                self.setActualLineNo(-1)
+                self.run = False
                 return True
 
     ##TODO link to GUI
@@ -178,9 +181,14 @@ class mainWindow(QObject):
         print(text)
         pass
     
-    ##TODO link to GUI
-    def setAccualLineNo(self, no: int):
-        pass     
+    def setActualLineNo(self, no: int):
+        
+        if self.run:
+            no += 10
+        else:
+            no = -1
+        self.lineNo.emit("Actual Line #:" + str(no))
+        
 
     def loopJob(self):
         while self.run:
@@ -188,11 +196,10 @@ class mainWindow(QObject):
                 break
         print("Waiting to join!")
 
-    def setVisualizationWidget(widget : QWidget):
-        pass
+    # def setVisualizationWidget(widget : QWidget):
+    #     pass
 
 
-    
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
     app.setWindowIcon(QIcon('bin/qml/images/svg_images/robot_icon_white.svg'))
