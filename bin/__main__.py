@@ -202,7 +202,7 @@ class mainWindow(QObject):
 
 if __name__ == "__main__":
     app = QGuiApplication(sys.argv)
-    app.setWindowIcon(QIcon('bin/qml/images/svg_images/robot_icon_white.svg'))
+    app.setWindowIcon(QIcon('qml/images/svg_images/robot_icon_white.svg'))
     QQuickStyle.setStyle("Basic")
     engine = QQmlApplicationEngine()
 

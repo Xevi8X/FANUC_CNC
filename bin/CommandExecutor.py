@@ -17,7 +17,7 @@ class CommandExecutor:
     absolutePos: bool = False
     zOffset: float = 0
     baseSpeed :float = 600.0
-    FSpeeds: int = 10
+    FSpeeds: int = 100
     speed_factor: float = 0.1
     orientation: list[float] = [0,0,0]
 
@@ -192,19 +192,23 @@ class CommandExecutor:
                 if not self.dryRun:
                     lpos = self.robot.get_lpos()
                     self.orientation = lpos[3:]
+                    
                     logging.info(f"Setting orientation to {str(self.orientation[0])}, {str(self.orientation[1])}, {str(self.orientation[2])}")
+                    print(f"Setting orientation to {str(self.orientation[0])}, {str(self.orientation[1])}, {str(self.orientation[2])}")
                 nextPoint = calcNextPoint(command)
+                nextPoint[2] += 5.0
                 if self.showVisualization:
                     self.addToVisualization([nextPoint])
                 if not self.dryRun:
-                    self.robot.move(
-                        "pose",
-                        vals= nextPoint + self.orientation,
-                        velocity=10,
-                        acceleration=100,
-                        cnt_val=0,
-                        linear=False,
-                    )
+                    pass
+                    # self.robot.move(
+                    #     "pose",
+                    #     vals= nextPoint + self.orientation,
+                    #     velocity=10,
+                    #     acceleration=100,
+                    #     cnt_val=0,
+                    #     linear=False,
+                    # )
 
             #TODO: What is G40-G42
             case 40:
@@ -272,6 +276,7 @@ class CommandExecutor:
         #TODO: control spindle
 
     def execute(self, command: Command):
+        print("Execute called")
         match command.command_type:
             case 'G':
                 self._handleGCommand(command)
