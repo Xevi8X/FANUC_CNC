@@ -10,9 +10,9 @@ class Visualization:
         matplotlib.use('QtAgg')
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(projection='3d')
-        self.ax.axes.set_xlim3d(left=0, right=100) 
-        self.ax.axes.set_ylim3d(bottom=0, top=100) 
-        self.ax.axes.set_zlim3d(bottom=-10, top=10) 
+        self.ax.axes.set_xlim3d(left=0, right=200) 
+        self.ax.axes.set_ylim3d(bottom=0, top=200) 
+        self.ax.axes.set_zlim3d(bottom=-5, top=5) 
         self.plot_points = [[],[],[]]
         self.line = self.ax.plot(self.plot_points[0], self.plot_points[1], self.plot_points[2])[0]
         plt.show()

@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # )
     # robot.connect()
     
-    processor = CommandProcessor('gcodes/meil.nc')
+    processor = CommandProcessor('gcodes/MEL_FINAL_CIRCLE.nc')
     executor = CommandExecutor(robot,True)
 
     no,commands = processor.nextCommand()
