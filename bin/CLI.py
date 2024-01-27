@@ -24,7 +24,7 @@ if __name__ == "__main__":
     no,commands = processor.nextCommand()
     #executor.setZOffset(-10)
     while no >= 0:
-        #sleep(1)
+        sleep(1)
         for command in commands:
             executor.execute(command)
         no,commands = processor.nextCommand()
