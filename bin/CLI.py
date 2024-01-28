@@ -18,13 +18,13 @@ if __name__ == "__main__":
     # )
     # robot.connect()
     
-    processor = CommandProcessor('gcodes/MEL_FINAL_CIRCLE.nc')
+    processor = CommandProcessor('gcodes/Test_falownika.nc')
     executor = CommandExecutor(robot,True)
 
     no,commands = processor.nextCommand()
     #executor.setZOffset(-10)
     while no >= 0:
-        sleep(1)
+        #sleep(0.1)
         for command in commands:
             executor.execute(command)
         no,commands = processor.nextCommand()
