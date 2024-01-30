@@ -23,6 +23,7 @@ class CommandExecutor:
     FSpeeds: int = 100
     speed_factor: float = 0.1
     orientation: list[float] = [0,0,0]
+    spindlespeed = 0
 
     client1 = minimalmodbus.Instrument('COM10', 1)  # port name, slave address (in decimal)
     client1.serial.baudrate = 9600  # baudrate
@@ -270,9 +271,12 @@ class CommandExecutor:
             case 3:
                 logging.info("M3 - Start spindle")
                 self.client1.write_register(5, 4930, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej rozpoczecie pracy wrzeciona
-                sleep(3)
+                #sleep(3)
                 output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
-                print("output stats decimal: {}".format(output_stats)) #wydruk w formacie decymalnym
+                while(output_stats > 1.05*self.spindlespeed or output_stats < 0.95*self.spindlespeed):
+                    print(self.spindlespeed)
+                    output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
+                    print("output stats decimal: {}".format(output_stats))
             case 6:
                 logging.info("M6 - Tool change")
             case 8:
@@ -292,6 +296,7 @@ class CommandExecutor:
             logging.error(f"Unrecognize command!: {command.command_type} {str(command.command_no)}")
             return
         logging.info(f"S{str(command.command_no)} - Set speed to {str(command.command_no)}RPM")
+        self.spindlespeed = command.command_no
         self.client1.write_register(4, 40000*command.command_no/12000, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci predkosci obrotowej
         self.client1.close_port_after_each_call = True
 

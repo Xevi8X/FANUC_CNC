@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # )
     # robot.connect()
     
-    processor = CommandProcessor('gcodes/Test_falownika.nc')
+    processor = CommandProcessor('gcodes/Plyta_obrobcza_pelna.nc')
     executor = CommandExecutor(robot,True)
 
     no,commands = processor.nextCommand()
