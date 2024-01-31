@@ -21,7 +21,7 @@ class CommandExecutor:
     zOffset: float = 0
     baseSpeed :float = 600.0
     FSpeeds: int = 100
-    speed_factor: float = 0.1
+    speed_factor: float = 8
     orientation: list[float] = [0,0,0]
     spindlespeed = 0
 
@@ -271,12 +271,12 @@ class CommandExecutor:
             case 3:
                 logging.info("M3 - Start spindle")
                 self.client1.write_register(5, 4930, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej rozpoczecie pracy wrzeciona
-                #sleep(3)
+                sleep(3)
                 output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
-                while(output_stats > 1.05*self.spindlespeed or output_stats < 0.95*self.spindlespeed):
-                    print(self.spindlespeed)
-                    output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
-                    print("output stats decimal: {}".format(output_stats))
+                #while(output_stats > 1.05*self.spindlespeed or output_stats < 0.95*self.spindlespeed):
+                 #   print(self.spindlespeed)
+                  #  output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
+                   # print("output stats decimal: {}".format(output_stats))
             case 6:
                 logging.info("M6 - Tool change")
             case 8:
