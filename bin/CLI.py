@@ -11,12 +11,12 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     robot = None
-    robot = Robot(
-        robot_model="Fanuc",
-        host="192.168.234.2",
-        port=18735,
-    )
-    robot.connect()
+    # robot = Robot(
+    #     robot_model="Fanuc",
+    #     host="192.168.234.2",
+    #     port=18735,
+    # )
+    # robot.connect()
     
     processor = CommandProcessor('gcodes/Plyta_obrobcza_pelna.nc')
     executor = CommandExecutor(robot,True)

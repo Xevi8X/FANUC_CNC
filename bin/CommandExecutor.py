@@ -25,15 +25,15 @@ class CommandExecutor:
     orientation: list[float] = [0,0,0]
     spindlespeed = 0
 
-    client1 = minimalmodbus.Instrument('COM10', 1)  # port name, slave address (in decimal)
-    client1.serial.baudrate = 9600  # baudrate
-    client1.serial.bytesize = 8
-    client1.serial.parity   = serial.PARITY_NONE
-    client1.serial.stopbits = 1
-    client1.serial.timeout  = 0.5      # seconds
-    client1.address         = 1        # this is the slave address number
-    client1.mode = minimalmodbus.MODE_RTU # rtu or ascii mode
-    client1.clear_buffers_before_each_transaction = True
+    # client1 = minimalmodbus.Instrument('COM10', 1)  # port name, slave address (in decimal)
+    # client1.serial.baudrate = 9600  # baudrate
+    # client1.serial.bytesize = 8
+    # client1.serial.parity   = serial.PARITY_NONE
+    # client1.serial.stopbits = 1
+    # client1.serial.timeout  = 0.5      # seconds
+    # client1.address         = 1        # this is the slave address number
+    # client1.mode = minimalmodbus.MODE_RTU # rtu or ascii mode
+    # client1.clear_buffers_before_each_transaction = True
 
     
     def __init__(self, robot, visualization: bool = False) -> None:
@@ -270,9 +270,9 @@ class CommandExecutor:
         match command.command_no:
             case 3:
                 logging.info("M3 - Start spindle")
-                self.client1.write_register(5, 4930, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej rozpoczecie pracy wrzeciona
-                sleep(3)
-                output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
+                # self.client1.write_register(5, 4930, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej rozpoczecie pracy wrzeciona
+                # sleep(3)
+                # output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
                 #while(output_stats > 1.05*self.spindlespeed or output_stats < 0.95*self.spindlespeed):
                  #   print(self.spindlespeed)
                   #  output_stats  = self.client1.read_register(20) #Odczyt pojedynczego rejestru 16bit zawierajacego RPM
@@ -285,8 +285,8 @@ class CommandExecutor:
                 logging.info("M9 - Turn off coolant")
             case 30:
                 logging.info("M30 - Program end")
-                self.client1.write_register(5, 4929, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej zakonczenieS pracy wrzeciona
-                self.client1.close_port_after_each_call = True
+                # self.client1.write_register(5, 4929, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci powodujacej zakonczenieS pracy wrzeciona
+                # self.client1.close_port_after_each_call = True
             case other:
                 logging.error(f"Unrecognize command!: {command.command_type} {str(command.command_no)}")
                 pass
@@ -296,9 +296,9 @@ class CommandExecutor:
             logging.error(f"Unrecognize command!: {command.command_type} {str(command.command_no)}")
             return
         logging.info(f"S{str(command.command_no)} - Set speed to {str(command.command_no)}RPM")
-        self.spindlespeed = command.command_no
-        self.client1.write_register(4, 40000*command.command_no/12000, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci predkosci obrotowej
-        self.client1.close_port_after_each_call = True
+        # self.spindlespeed = command.command_no
+        # self.client1.write_register(4, 40000*command.command_no/12000, number_of_decimals=0, functioncode=6) #zapis do rejestru wartosci predkosci obrotowej
+        # self.client1.close_port_after_each_call = True
 
     def execute(self, command: Command):
         print("Execute called")
